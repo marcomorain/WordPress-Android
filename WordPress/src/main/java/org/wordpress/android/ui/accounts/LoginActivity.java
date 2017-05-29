@@ -1,5 +1,7 @@
 package org.wordpress.android.ui.accounts;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,12 +12,15 @@ import org.wordpress.android.R;
 import org.wordpress.android.WordPress;
 import org.wordpress.android.ui.accounts.login.LoginEmailFragment;
 import org.wordpress.android.ui.accounts.login.LoginListener;
+import org.wordpress.android.ui.accounts.login.LoginMagicLinkAttemptLoginFragment;
 import org.wordpress.android.ui.accounts.login.LoginMagicLinkRequestFragment;
 import org.wordpress.android.ui.accounts.login.LoginMagicLinkSentFragment;
 import org.wordpress.android.ui.accounts.login.LoginPrologueFragment;
 import org.wordpress.android.util.ToastUtils;
 
 public class LoginActivity extends AppCompatActivity implements LoginListener {
+    public static final String MAGIC_LOGIN = "magic-login";
+    public static final String TOKEN_PARAMETER = "token";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +30,11 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         setContentView(R.layout.login_activity);
 
         if (savedInstanceState == null) {
-            addLoginPrologueFragment();
+            if (hasMagicLinkLoginIntent()) {
+                addMagicLinkLoginAttemptFragment();
+            } else {
+                addLoginPrologueFragment();
+            }
         }
     }
 
@@ -34,6 +43,12 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, loginSignupFragment, LoginPrologueFragment.TAG);
         fragmentTransaction.commit();
+    }
+
+    private void addMagicLinkLoginAttemptFragment() {
+        String token = getIntent().getData().getQueryParameter(TOKEN_PARAMETER);
+        slideInFragment(LoginMagicLinkAttemptLoginFragment.newInstance(token), false,
+                LoginMagicLinkAttemptLoginFragment.TAG);
     }
 
     private void slideInFragment(Fragment fragment, boolean shouldAddToBackStack, String tag) {
@@ -56,6 +71,14 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
         return false;
     }
+
+    private boolean hasMagicLinkLoginIntent() {
+        String action = getIntent().getAction();
+        Uri uri = getIntent().getData();
+
+        return Intent.ACTION_VIEW.equals(action) && uri != null && uri.getHost().contains(MAGIC_LOGIN);
+    }
+
 
     // LoginListener implementation methods
 
@@ -100,6 +123,16 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     @Override
     public void gotSiteAddress(String siteAddress) {
         ToastUtils.showToast(this, "Input site address is not implemented yet. Input site address: " + siteAddress);
+    }
+
+    @Override
+    public void restartLogin() {
+        addLoginPrologueFragment();
+    }
+
+    @Override
+    public void loggedIn() {
+        ToastUtils.showToast(this, "Logged in is not implemented yet.");
     }
 
     @Override

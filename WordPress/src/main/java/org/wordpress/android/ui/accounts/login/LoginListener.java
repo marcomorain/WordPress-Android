@@ -19,6 +19,10 @@ public interface LoginListener {
     // Login Site Address input callbacks
     void gotSiteAddress(String siteAddress);
 
+    // Magic link attempt login callbacks
+    void restartLogin();
+    void loggedIn();
+
     // Help callback
     void help();
 }

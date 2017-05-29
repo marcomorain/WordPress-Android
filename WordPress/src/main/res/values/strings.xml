@@ -1693,6 +1693,8 @@
     <string name="enter_email_wordpress_com">Log in to WordPress.com using an email address to manage all your WordPress sites</string>
     <string name="next">Next</string>
     <string name="open_mail">Open mail</string>
+    <string name="restart_login">Restart Login</string>
+    <string name="cancel_login">Cancel Login</string>
     <string name="enter_username_password_instead">Log in to your site by entering your site address instead.</string>
     <string name="enter_the_address_of_your_wordpress_site">Enter the address of your WordPress site</string>
     <string name="email_not_registered_wpcom">This email is not registered on WordPress.com</string>
@@ -1701,4 +1703,11 @@
     <string name="login_magic_links_sent_label">Your magic link is on its way! Check your email on this device and tap the link in the email you received from WordPress.com.</string>
     <string name="login_magic_links_sent_description">Magic link sent illustration</string>
     <string name="login_magic_link_email_requesting">Requesting log-in email</string>
+    <string name="login_magic_link_attempting_login">Logging you in WordPress.com</string>
+    <string name="error_fetch_user_sites">Error while trying to retrieve your sites</string>
+    <string name="login_magic_link_phase_authenticating">Logging in to WordPress.com</string>
+    <string name="login_magic_link_phase_account_fetch">Fetching account</string>
+    <string name="login_magic_link_phase_account_settings_fetch">Fetching account settings</string>
+    <string name="login_magic_link_phase_sites_fetch">Fetching your sites</string>
+    <string name="login_description_progress_mark">Login progress mark</string>
 </resources>
