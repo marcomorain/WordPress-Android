@@ -8,10 +8,11 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="180dp"
+        android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/toolbar"
+        android:layout_marginTop="@dimen/margin_extra_extra_large"
         android:scaleType="centerInside"
         android:contentDescription="@string/login_magic_links_sent_description"
         android:src="@drawable/login_magic_link_sent_illustration"/>
