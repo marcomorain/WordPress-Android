@@ -46,7 +46,11 @@ public class LoginMagicLinkAttemptLoginFragment extends Fragment {
         ACCOUNT_SETTINGS_ERROR,
         SITES,
         SITES_ERROR,
-        DONE
+        DONE;
+
+        public boolean isBeyond(State state) {
+            return this.ordinal() > state.ordinal();
+        }
     }
 
     private View mLoginChecklist;
@@ -182,19 +186,19 @@ public class LoginMagicLinkAttemptLoginFragment extends Fragment {
 
     private void updateProgressViews() {
         mProgressAuth.setVisibility(mState == State.AUTH ? View.VISIBLE : View.INVISIBLE);
-        mDoneAuth.setVisibility(mState.ordinal() > State.AUTH_ERROR.ordinal() ? View.VISIBLE : View.INVISIBLE);
+        mDoneAuth.setVisibility(mState.isBeyond(State.AUTH_ERROR) ? View.VISIBLE : View.INVISIBLE);
         mErrorAuth.setVisibility(mState == State.AUTH_ERROR ? View.VISIBLE : View.INVISIBLE);
 
         mProgressAcc.setVisibility(mState == State.ACCOUNT ? View.VISIBLE : View.INVISIBLE);
-        mDoneAcc.setVisibility(mState.ordinal() > State.ACCOUNT_ERROR.ordinal() ? View.VISIBLE : View.INVISIBLE);
+        mDoneAcc.setVisibility(mState.isBeyond(State.ACCOUNT_ERROR) ? View.VISIBLE : View.INVISIBLE);
         mErrorAcc.setVisibility(mState == State.ACCOUNT_ERROR ? View.VISIBLE : View.INVISIBLE);
 
         mProgressAccSettings.setVisibility(mState == State.ACCOUNT_SETTINGS ? View.VISIBLE : View.INVISIBLE);
-        mDoneAccSettings.setVisibility(mState.ordinal() > State.ACCOUNT_SETTINGS_ERROR.ordinal() ? View.VISIBLE : View.INVISIBLE);
+        mDoneAccSettings.setVisibility(mState.isBeyond(State.ACCOUNT_SETTINGS_ERROR) ? View.VISIBLE : View.INVISIBLE);
         mErrorAccSettings.setVisibility(mState == State.ACCOUNT_SETTINGS_ERROR ? View.VISIBLE : View.INVISIBLE);
 
         mProgressSites.setVisibility(mState == State.SITES ? View.VISIBLE : View.INVISIBLE);
-        mDoneSites.setVisibility(mState.ordinal() > State.SITES_ERROR.ordinal() ? View.VISIBLE : View.INVISIBLE);
+        mDoneSites.setVisibility(mState.isBeyond(State.SITES_ERROR) ? View.VISIBLE : View.INVISIBLE);
         mErrorSites.setVisibility(mState == State.SITES_ERROR ? View.VISIBLE : View.INVISIBLE);
 
         boolean erred = mState == State.AUTH_ERROR
