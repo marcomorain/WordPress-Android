@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import org.wordpress.android.R;
 import org.wordpress.android.WordPress;
+import org.wordpress.android.analytics.AnalyticsTracker;
 import org.wordpress.android.ui.accounts.login.LoginEmailFragment;
 import org.wordpress.android.ui.accounts.login.LoginListener;
 import org.wordpress.android.ui.accounts.login.LoginMagicLinkAttemptLoginFragment;
@@ -132,8 +133,10 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     @Override
     public void loggedInViaMagicLink() {
-//        AnalyticsTracker.track(AnalyticsTracker.Stat.LOGIN_MAGIC_LINK_SUCCEEDED);
-        ToastUtils.showToast(this, "Logged in to wpcom is not fully implemented yet.");
+        AnalyticsTracker.track(AnalyticsTracker.Stat.LOGIN_MAGIC_LINK_SUCCEEDED);
+
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override
