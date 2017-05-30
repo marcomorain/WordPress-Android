@@ -18,7 +18,12 @@ public class LoginMagicLinkInterceptActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Intent intent = new Intent(getIntent());
-        intent.setClass(this, AppPrefs.isLoginWizardStyleActivated() ? WPMainActivity.class : SignInActivity.class);
+        if (AppPrefs.isLoginWizardStyleActivated()) {
+            intent.setClass(this, WPMainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        } else {
+            intent.setClass(this, SignInActivity.class);
+        }
         startActivity(intent);
 
         finish();
