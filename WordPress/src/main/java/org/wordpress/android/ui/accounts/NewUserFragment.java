@@ -77,7 +77,6 @@ public class NewUserFragment extends AbstractFragment {
 
     private static final String KEY_SITES_FETCHED = "KEY_SITES_FETCHED";
     private static final String KEY_ACCOUNT_SETTINGS_FETCHED = "KEY_ACCOUNT_SETTINGS_FETCHED";
-    private static final String KEY_ACCOUNT_FETCHED = "KEY_ACCOUNT_FETCHED";
 
     private EditText mEmailTextField;
     private EditText mPasswordTextField;
@@ -87,11 +86,8 @@ public class NewUserFragment extends AbstractFragment {
     private RelativeLayout mProgressBarSignIn;
     private boolean mEmailAutoCorrected;
 
-    private boolean mAutoCompleteUrl;
-
     protected boolean mSitesFetched = false;
     protected boolean mAccountSettingsFetched = false;
-    protected boolean mAccountFetched = false;
 
     protected @Inject SiteStore mSiteStore;
     protected @Inject AccountStore mAccountStore;
@@ -380,7 +376,6 @@ public class NewUserFragment extends AbstractFragment {
 
         mSitesFetched = false;
         mAccountSettingsFetched = false;
-        mAccountFetched = false;
 
         String username = getUsername();
         String email = getEmail();
@@ -490,7 +485,6 @@ public class NewUserFragment extends AbstractFragment {
 
         if (savedInstanceState != null) {
             mSitesFetched = savedInstanceState.getBoolean(KEY_SITES_FETCHED, false);
-            mAccountFetched = savedInstanceState.getBoolean(KEY_ACCOUNT_FETCHED, false);
             mAccountSettingsFetched = savedInstanceState.getBoolean(KEY_ACCOUNT_SETTINGS_FETCHED, false);
         }
     }
@@ -638,9 +632,6 @@ public class NewUserFragment extends AbstractFragment {
         }
         // Fetch user infos
         mDispatcher.dispatch(AccountActionBuilder.newFetchAccountAction());
-        mDispatcher.dispatch(AccountActionBuilder.newFetchSettingsAction());
-        // Fetch sites
-        mDispatcher.dispatch(SiteActionBuilder.newFetchSitesAction());
     }
 
     private void getDomainSuggestionsFromTitle() {
@@ -656,7 +647,6 @@ public class NewUserFragment extends AbstractFragment {
         super.onSaveInstanceState(outState);
         // Save fetch state
         outState.putBoolean(KEY_SITES_FETCHED, mSitesFetched);
-        outState.putBoolean(KEY_ACCOUNT_FETCHED, mAccountFetched);
         outState.putBoolean(KEY_ACCOUNT_SETTINGS_FETCHED, mAccountSettingsFetched);
     }
 
@@ -737,10 +727,17 @@ public class NewUserFragment extends AbstractFragment {
     @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAccountChanged(OnAccountChanged event) {
+        // Success
+        if (event.causeOfChange == AccountAction.FETCH_ACCOUNT) {
+            mDispatcher.dispatch(AccountActionBuilder.newFetchSettingsAction());
+            mDispatcher.dispatch(SiteActionBuilder.newFetchSitesAction());
+            return;
+        }
+
         mAccountSettingsFetched |= event.causeOfChange == AccountAction.FETCH_SETTINGS;
-        mAccountFetched |= event.causeOfChange == AccountAction.FETCH_ACCOUNT;
+
         // Finish activity if sites have been fetched
-        if (mSitesFetched && mAccountSettingsFetched && mAccountFetched) {
+        if (mSitesFetched && mAccountSettingsFetched) {
             finishCurrentActivity();
         }
     }
@@ -750,7 +747,7 @@ public class NewUserFragment extends AbstractFragment {
     public void onSiteChanged(OnSiteChanged event) {
         mSitesFetched = true;
         // Finish activity if account settings have been fetched
-        if (mAccountSettingsFetched && mAccountFetched) {
+        if (mAccountSettingsFetched) {
             finishCurrentActivity();
         }
     }
