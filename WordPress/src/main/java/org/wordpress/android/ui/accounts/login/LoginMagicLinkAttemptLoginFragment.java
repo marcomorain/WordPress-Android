@@ -339,5 +339,4 @@ public class LoginMagicLinkAttemptLoginFragment extends Fragment {
             mLoginListener.loggedInViaMagicLink();
         }
     }
-
 }

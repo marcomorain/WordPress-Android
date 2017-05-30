@@ -80,7 +80,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         return Intent.ACTION_VIEW.equals(action) && uri != null && uri.getHost().contains(MAGIC_LOGIN);
     }
 
-
     // LoginListener implementation methods
 
     @Override
