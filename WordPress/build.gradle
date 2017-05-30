@@ -28,7 +28,7 @@ android {
 
     dexOptions {
         jumboMode = true
-        javaMaxHeapSize = "6g"
+        javaMaxHeapSize = "2g"
         dexInProcess = true
     }
 

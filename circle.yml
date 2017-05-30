@@ -1,0 +1,29 @@
+machine:
+  java:
+    version: oraclejdk8
+  environment:
+    TERM: dumb
+    MALLOC_ARENA_MAX: 2
+    GRADLE_OPTS: -Xmx4g
+    ANDROID_SDKS: android-14
+    ANDROID_TARGET: android-14
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --force --filter platform-tools
+    - echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository,android-25,build-tools-25.0.2
+    - cp gradle.properties-example gradle.properties
+    - emulator -avd circleci-android24 -no-window:
+        background: true
+        parallel:   true
+        environment:
+          QEMU_AUDIO_DRV: none
+test:
+  override:
+    - ? |
+        case $CIRCLE_NODE_INDEX in
+          0) ./gradlew -PdisablePreDex assembleVanillaRelease ;;
+          1) ./gradlew -PdisablePreDex lint || (grep -A20 -B2 'severity="Error"' WordPress/build/**/*.xml; exit 1) ;;
+          2) ./gradlew -PdisablePreDex test ;;
+          3) ./gradlew -PdisablePreDex assemble && circle-android wait-for-boot && ./gradlew -PdisablePreDex connectedAndroidTest ;;
+        esac
+      : parallel: true
