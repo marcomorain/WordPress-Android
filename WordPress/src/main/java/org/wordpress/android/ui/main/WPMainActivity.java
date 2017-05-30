@@ -234,7 +234,11 @@ public class WPMainActivity extends AppCompatActivity {
                     checkMagicLinkSignIn();
                 }
             } else {
-                ActivityLauncher.showSignInForResult(this);
+                if (AppPrefs.isLoginWizardStyleActivated()) {
+                    ActivityLauncher.forwardLoginForResult(this, getIntent());
+                } else {
+                    ActivityLauncher.showSignInForResult(this);
+                }
             }
         }
 

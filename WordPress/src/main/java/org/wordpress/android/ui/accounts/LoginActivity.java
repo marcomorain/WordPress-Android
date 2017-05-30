@@ -131,8 +131,9 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     @Override
-    public void loggedIn() {
-        ToastUtils.showToast(this, "Logged in is not implemented yet.");
+    public void loggedInViaMagicLink() {
+//        AnalyticsTracker.track(AnalyticsTracker.Stat.LOGIN_MAGIC_LINK_SUCCEEDED);
+        ToastUtils.showToast(this, "Logged in to wpcom is not fully implemented yet.");
     }
 
     @Override

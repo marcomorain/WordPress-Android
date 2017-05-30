@@ -305,6 +305,12 @@ public class LoginMagicLinkAttemptLoginFragment extends Fragment {
     @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSiteChanged(OnSiteChanged event) {
+        if (mState.isBeyond(State.SITES)) {
+            // ignore if we're already received this even before.
+            //  Happens because updating the site emits another onSiteChanged.
+            return;
+        }
+
         if (event.isError()) {
             AppLog.e(T.API, "onSiteChanged has error: " + event.error.type + " - " + event.error.toString());
             if (!isAdded() || event.error.type != SiteErrorType.DUPLICATE_SITE) {
@@ -330,7 +336,7 @@ public class LoginMagicLinkAttemptLoginFragment extends Fragment {
         NotificationsUpdateService.startService(getActivity().getApplicationContext());
 
         if (mLoginListener != null) {
-            mLoginListener.loggedIn();
+            mLoginListener.loggedInViaMagicLink();
         }
     }
 

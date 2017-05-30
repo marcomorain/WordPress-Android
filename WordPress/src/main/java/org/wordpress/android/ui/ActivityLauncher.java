@@ -267,10 +267,18 @@ public class ActivityLauncher {
     }
 
     public static void showSignInForResult(Activity activity) {
-        Class<?> loginClass = BuildConfig.LOGIN_WIZARD_STYLE_ACTIVE ? LoginActivity.class : SignInActivity.class;
-
-        Intent intent = new Intent(activity, loginClass);
+        Intent intent = new Intent(activity, SignInActivity.class);
         activity.startActivityForResult(intent, RequestCodes.ADD_ACCOUNT);
+    }
+
+    public static void forwardLoginForResult(Activity activity, Intent intent) {
+        Intent newIntent = new Intent(activity, LoginActivity.class);
+
+        // inherit the Action and Data. Needed for magic link forwarding.
+        newIntent.setAction(intent.getAction());
+        newIntent.setData(intent.getData());
+
+        activity.startActivityForResult(newIntent, RequestCodes.ADD_ACCOUNT);
     }
 
     public static void viewStatsSinglePostDetails(Context context, SiteModel site, PostModel post, boolean isPage) {

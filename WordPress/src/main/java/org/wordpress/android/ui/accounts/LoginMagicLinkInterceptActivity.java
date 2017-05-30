@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.wordpress.android.ui.main.WPMainActivity;
 import org.wordpress.android.ui.prefs.AppPrefs;
 
 /**
@@ -17,7 +18,7 @@ public class LoginMagicLinkInterceptActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Intent intent = new Intent(getIntent());
-        intent.setClass(this, AppPrefs.isLoginWizardStyleActivated() ? LoginActivity.class : SignInActivity.class);
+        intent.setClass(this, AppPrefs.isLoginWizardStyleActivated() ? WPMainActivity.class : SignInActivity.class);
         startActivity(intent);
 
         finish();

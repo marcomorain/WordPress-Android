@@ -21,7 +21,7 @@ public interface LoginListener {
 
     // Magic link attempt login callbacks
     void restartLogin();
-    void loggedIn();
+    void loggedInViaMagicLink();
 
     // Help callback
     void help();
